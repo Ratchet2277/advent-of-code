@@ -1,0 +1,43 @@
+import re
+
+if __name__ != '__main__':
+    raise Exception('This file is not meant to be imported')
+
+
+def main():
+    input_path = "./input.txt"
+    regex = re.compile(r'(\d+)\s+(\d+)')
+    first_list, second_list = get_input(input_path, regex)
+
+    first_list.sort()
+    second_list.sort()
+
+    result_list = compare_list(first_list, second_list)
+
+    print('Total distance: ', sum(result_list))
+
+
+def get_input(path: str, matching_regex: re) -> (list, list):
+    file = open(path)
+
+    first_list = []
+    second_list = []
+
+    while True:
+        line = file.readline()
+        if not line:
+            break
+        result = re.findall(matching_regex, line)
+        first_list.append(int(result[0][0]))
+        second_list.append(int(result[0][1]))
+    return first_list, second_list
+
+
+def compare_list(first_list: list, second_list: list) -> list:
+    result_list = []
+    for i in range(len(first_list)):
+        result_list.append(abs(first_list[i] - second_list[i]))
+    return result_list
+
+
+main()
