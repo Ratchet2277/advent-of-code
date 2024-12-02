@@ -46,6 +46,7 @@ def is_report_safe_with_one_error(report: list[int]) -> bool:
         tem_report = report[:i] + report[i+1:]
         if is_report_safe(tem_report):
             return True
+    return False
 
 
 def sanitize_report(report: str)-> list[int]:
