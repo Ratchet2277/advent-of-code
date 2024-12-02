@@ -1,5 +1,4 @@
 import re
-import common
 from common import read_file
 
 if __name__ != '__main__':
@@ -16,7 +15,8 @@ def main():
 
     result_list = compare_list(first_list, second_list)
 
-    print('Total distance: ', sum(result_list))
+    print('Total distance part one: ', sum(result_list))
+    print('Total distance part two: ', part_two(first_list, second_list))
 
 
 def get_input(path: str, matching_regex: re) -> (list, list):
@@ -38,6 +38,14 @@ def compare_list(first_list: list, second_list: list) -> list:
     for i in range(len(first_list)):
         result_list.append(abs(first_list[i] - second_list[i]))
     return result_list
+
+
+def part_two(first_list: list[int], second_list: list[int]) -> int:
+    total = 0
+    for number in first_list:
+        multiplier = second_list.count(number)
+        total += number * multiplier
+    return total
 
 
 main()
