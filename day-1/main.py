@@ -1,4 +1,6 @@
 import re
+import common
+from common import read_file
 
 if __name__ != '__main__':
     raise Exception('This file is not meant to be imported')
@@ -18,18 +20,16 @@ def main():
 
 
 def get_input(path: str, matching_regex: re) -> (list, list):
-    file = open(path)
+    input = read_file(path)
 
     first_list = []
     second_list = []
 
-    while True:
-        line = file.readline()
-        if not line:
-            break
+    for line in input:
         result = re.findall(matching_regex, line)
         first_list.append(int(result[0][0]))
         second_list.append(int(result[0][1]))
+
     return first_list, second_list
 
 
