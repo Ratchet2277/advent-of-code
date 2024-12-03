@@ -10,7 +10,7 @@ if __name__ != '__main__':
 def main():
     input_data = ''.join(common.read_file("input.txt"))
 
-    #Should be possible to do it in one regex, if you can figure out how, I'm curious
+    #Should be possible to do it in one regex, if you can't figure out how, I'm curious
     mul_regex = re.compile(r"mul\((\d{1,3}),(\d{1,3})\)")
     do_regex = re.compile(r"do\(\)")
     dont_regex = re.compile(r"don't\(\)")
