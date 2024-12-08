@@ -126,8 +126,7 @@ def solve_equation(equation: Equation, summed_solutions: multiprocessing.Value) 
         solution = Solution.from_equation(equation).set_solution(symboles)
         if solution.test_solution():
             summed_solutions.value += solution.solution
-            return None
-    return None
+            return
 
 
 if __name__ == "__main__":
