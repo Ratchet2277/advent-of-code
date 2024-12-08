@@ -20,6 +20,7 @@ class Equation:
 
 
 class Solution(Equation):
+    # Comment last symbole for part one solution
     symboles = {
         0: "+",
         1: "*",
