@@ -1,12 +1,11 @@
+import multiprocessing
 from copy import deepcopy
 from enum import Enum
+from typing import Optional
 
 import progressbar
 
 import common
-
-if __name__ != '__main__':
-    raise Exception('This file is not meant to be imported')
 
 
 class Orientation(Enum):
@@ -108,24 +107,35 @@ def main():
 
     print("Testing new obstacle positions :")
 
-    for x, y in progressbar.progressbar(positions):
+    procs = []
+    nb_case_while_guard_stuck = multiprocessing.Value('i', 0)
+
+    for x, y in positions:
         new_grid = deepcopy(grid)
         new_grid.add_obstacle(Obstacle(x, y))
 
-        if simulate_grid(new_grid)[0]:
-            case_while_guard_stuck += 1
+        proc = multiprocessing.Process(target=simulate_grid, args=(new_grid, nb_case_while_guard_stuck))
+        procs.append(proc)
+        proc.start()
 
-    print(f"Case stuck: {case_while_guard_stuck}")
+    for proc in progressbar.progressbar(procs):
+        proc.join()
+
+    print(f"Case stuck: {nb_case_while_guard_stuck.value}")
 
 
-def simulate_grid(grid: Grid) -> (bool, list[tuple[int, int]]):
+def simulate_grid(grid: Grid, nb_case_while_guard_stuck: Optional[multiprocessing.Value] = None) -> (
+bool, list[tuple[int, int]]):
     guard_positions = [(grid.guard.x, grid.guard.y, grid.guard.orientation)]
     while grid.move_guard():
         position = (grid.guard.x, grid.guard.y, grid.guard.orientation)
         if position in guard_positions:
+            if not nb_case_while_guard_stuck is None:
+                nb_case_while_guard_stuck.value += 1
             return True, set([(pos[0], pos[1]) for pos in guard_positions])
         guard_positions.append(position)
     return False, set([(pos[0], pos[1]) for pos in guard_positions])
 
 
-main()
+if __name__ == '__main__':
+    main()
