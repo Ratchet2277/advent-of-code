@@ -21,8 +21,6 @@ def follow_trail(grid: list[str], x: int, y: int) -> list[tuple[int, int]]:
 
     output = list()
     for neighbor in get_neighborhood_coord(x, y):
-        if (neighbor[0], neighbor[1]) in output:
-            continue
         if neighbor[0] < 0 or neighbor[1] < 0:
             continue
         if neighbor[0] >= len(grid[0]) or neighbor[1] >= len(grid):
