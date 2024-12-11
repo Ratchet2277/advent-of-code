@@ -1,5 +1,6 @@
 import common
 
+
 def main():
     grid = common.strip_end_of_line(common.read_file("input.txt"))
     total_score = 0
@@ -13,6 +14,7 @@ def main():
             part_1_score += len(set(trail))
     print(part_1_score)
     print(total_score)
+
 
 def follow_trail(grid: list[str], x: int, y: int) -> list[tuple[int, int]]:
     current_value = int(grid[y][x])
@@ -32,9 +34,8 @@ def follow_trail(grid: list[str], x: int, y: int) -> list[tuple[int, int]]:
     return output
 
 
-
-def get_neighborhood_coord(x: int, y: int)-> list[tuple[int, int]]:
-    return [(x-1, y), (x, y-1), (x, y+1), (x+1, y)]
+def get_neighborhood_coord(x: int, y: int) -> list[tuple[int, int]]:
+    return [(x - 1, y), (x, y - 1), (x, y + 1), (x + 1, y)]
 
 
 if __name__ == '__main__':
