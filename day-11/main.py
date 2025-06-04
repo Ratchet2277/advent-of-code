@@ -1,6 +1,7 @@
 from collections.abc import Callable
 
 import common
+import progressbar
 
 class Rule:
     def __init__(self, condition: Callable[[int], bool], rule: Callable):
@@ -12,7 +13,7 @@ def main():
     data = common.read_file("input.txt")[0]
     stones: list[int] = [int(x) for x in data.split(" ")]
 
-    for i in range(75):
+    for _ in progressbar.progressbar(range(75)):
         stones = blink(stones)
     print(len(stones))
 
