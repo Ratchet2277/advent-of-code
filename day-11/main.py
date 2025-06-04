@@ -1,4 +1,3 @@
-import concurrent.futures
 from collections.abc import Callable
 import shutil
 
