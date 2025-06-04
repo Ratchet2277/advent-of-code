@@ -1,7 +1,7 @@
 import concurrent.futures
 from collections.abc import Callable
+import shutil
 
-import common
 import progressbar
 
 class Rule:
@@ -11,37 +11,51 @@ class Rule:
 
 
 def main():
-    data = common.read_file("input.txt")[0]
-    stones: list[int] = [int(x) for x in data.split(" ")]
-
-    for _ in progressbar.progressbar(range(75)):
-        stones = blink(stones)
-    print(len(stones))
-
+    shutil.copy('input.txt', 'last-result.txt')
+    for i in progressbar.progressbar(range(75)):
+        blink()
+        shutil.copy('output.txt', 'last-result.txt')
+    with open("last-result.txt", "r") as file:
+        count = 0
+        while True:
+            char = file.read(1)
+            if not char:
+                print(count)
+                return None
+            if char == " ":
+                count += 1
 rules = [
-    Rule(lambda stone: not stone, lambda stone: [0]),
+    Rule(lambda stone: not stone, lambda stone: [1]),
     Rule(lambda stone: not bool(len(str(stone)) % 2),
          lambda stone: split_stone(stone)),
     Rule(lambda _: True, lambda stone: [stone * 2024])
 ]
 
-def blink(stones: list[int]) -> list[int]:
-    new_stones = []
-    for stone in stones:
-        new_stones.extend(change_stone(stone))
+def blink() -> None:
+    with open("last-result.txt", "r") as file, open("output.txt", "w") as output:
+        stone = ""
+        while True:
+            char = file.read(1)
+            if not char:
+                if not stone:
+                    return None
+                output.write(f"{" ".join([str(x) for x in change_stone(int(stone))])} ")
+                return None
 
-    return new_stones
+            if char == " ":
+                if not stone:
+                    continue
+                output.write(f"{" ".join([str(x) for x in change_stone(int(stone))])} ")
+                stone = ""
+                continue
+
+            stone += char
+        return None
 
 def split_stone(stone: int) -> list[int]:
     stone = str(stone)
     length = len(stone) >> 1
     return [int(stone[:length]), int(stone[length:])]
-
-def change_stone_batch(stones: list[int]) -> list[int]:
-    new_stones = []
-    for stone in stones:
-        new_stones.extend(change_stone(stone))
-    return new_stones
 
 def change_stone(stone: int) -> list[int]:
     for rule in rules:
