@@ -27,15 +27,8 @@ rules = [
 
 def blink(stones: list[int]) -> list[int]:
     new_stones = []
-    threads = []
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        batch_size = 200000
-        # calls change_stone_batch in parallel for each batch in stones
-        for i in range(0, len(stones), batch_size):
-            threads.append(executor.submit(change_stone_batch, stones[i:i + batch_size]))
-
-    for thread in threads:
-        new_stones.extend(thread.result())
+    for stone in stones:
+        new_stones.extend(change_stone(stone))
 
     return new_stones
 
